@@ -133,6 +133,31 @@ const periodicLayout = [
 
 const lanthanides = ["Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"];
 const actinides = ["Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr"];
+const lanthanidesSet = new Set(["La", ...lanthanides]);
+const actinidesSet = new Set(["Ac", ...actinides]);
+const alkaliSet = new Set(["Li", "Na", "K", "Rb", "Cs", "Fr"]);
+const transitionSet = new Set([
+  "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn",
+  "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd",
+  "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg",
+  "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn"
+]);
+const metalloidSet = new Set(["B", "Si", "Ge", "As", "Sb", "Te"]);
+const nonMetalSet = new Set(["H", "C", "N", "O", "P", "S", "Se"]);
+const halogenSet = new Set(["F", "Cl", "Br", "I", "At", "Ts"]);
+const nobleSet = new Set(["He", "Ne", "Ar", "Kr", "Xe", "Rn", "Og"]);
+
+const categoryLabels = {
+  alkali: "Alkali Metal",
+  transition: "Transition Metal",
+  metalloid: "Metalloid",
+  nonmetal: "Non-metal",
+  halogen: "Halogen",
+  noble: "Noble Gas",
+  lanthanide: "Lanthanide",
+  actinide: "Actinide",
+  other: "Other Metal"
+};
 
 const subshellOrder = [
   [1, 2],
@@ -164,8 +189,46 @@ const actinidesRow = document.getElementById("actinidesRow");
 const atomicNumberEl = document.getElementById("atomicNumber");
 const elementNameEl = document.getElementById("elementName");
 const shellConfigEl = document.getElementById("shellConfig");
+const detailTitleEl = document.getElementById("detailTitle");
+const detailCategoryEl = document.getElementById("detailCategory");
+const detailPeriodGroupEl = document.getElementById("detailPeriodGroup");
+const detailBlockEl = document.getElementById("detailBlock");
+const detailPhaseEl = document.getElementById("detailPhase");
+const detailSeriesEl = document.getElementById("detailSeries");
+const detailValenceEl = document.getElementById("detailValence");
+const detailConfigEl = document.getElementById("detailConfig");
+const detailShellsFullEl = document.getElementById("detailShellsFull");
+const detailRadioactivityEl = document.getElementById("detailRadioactivity");
+const detailOccurrenceEl = document.getElementById("detailOccurrence");
+const detailOverviewEl = document.getElementById("detailOverview");
 
 let selectedSymbol = "C";
+
+const electronConfigOrder = [
+  ["1s", 2],
+  ["2s", 2],
+  ["2p", 6],
+  ["3s", 2],
+  ["3p", 6],
+  ["4s", 2],
+  ["3d", 10],
+  ["4p", 6],
+  ["5s", 2],
+  ["4d", 10],
+  ["5p", 6],
+  ["6s", 2],
+  ["4f", 14],
+  ["5d", 10],
+  ["6p", 6],
+  ["7s", 2],
+  ["5f", 14],
+  ["6d", 10],
+  ["7p", 6]
+];
+
+const gasSet = new Set(["H", "He", "N", "O", "F", "Ne", "Cl", "Ar", "Kr", "Xe", "Rn", "Og"]);
+const liquidSet = new Set(["Br", "Hg"]);
+const radioactiveExceptions = new Set(["Tc", "Pm"]);
 
 function calcShells(atomicNumber) {
   let remaining = atomicNumber;
@@ -256,6 +319,112 @@ function renderAtom(element) {
   shellConfigEl.textContent = shells.join(" - ");
 }
 
+function elementCategory(symbol) {
+  if (lanthanidesSet.has(symbol)) return "lanthanide";
+  if (actinidesSet.has(symbol)) return "actinide";
+  if (alkaliSet.has(symbol)) return "alkali";
+  if (transitionSet.has(symbol)) return "transition";
+  if (metalloidSet.has(symbol)) return "metalloid";
+  if (nonMetalSet.has(symbol)) return "nonmetal";
+  if (halogenSet.has(symbol)) return "halogen";
+  if (nobleSet.has(symbol)) return "noble";
+  return "other";
+}
+
+function periodGroup(symbol) {
+  for (let row = 0; row < periodicLayout.length; row++) {
+    const col = periodicLayout[row].indexOf(symbol);
+    if (col !== -1) {
+      return { period: row + 1, group: col + 1 };
+    }
+  }
+
+  if (lanthanides.includes(symbol)) return { period: 6, group: "Lanthanide" };
+  if (actinides.includes(symbol)) return { period: 7, group: "Actinide" };
+
+  return { period: "-", group: "-" };
+}
+
+function blockFor(symbol, group) {
+  if (symbol === "He") return "s-block";
+  if (lanthanidesSet.has(symbol) || actinidesSet.has(symbol)) return "f-block";
+  if (typeof group === "number" && group <= 2) return "s-block";
+  if (typeof group === "number" && group >= 13) return "p-block";
+  return "d-block";
+}
+
+function seriesFor(symbol) {
+  if (lanthanidesSet.has(symbol)) return "Lanthanide Series";
+  if (actinidesSet.has(symbol)) return "Actinide Series";
+  return "Main / Transition Series";
+}
+
+function phaseFor(symbol) {
+  if (liquidSet.has(symbol)) return "Liquid";
+  if (gasSet.has(symbol)) return "Gas";
+  return "Solid";
+}
+
+function radioactivityFor(element) {
+  if (radioactiveExceptions.has(element.symbol) || element.number >= 84) {
+    return "Radioactive (no stable isotopes)";
+  }
+  return "Not inherently radioactive";
+}
+
+function occurrenceFor(element) {
+  if (element.number >= 95) return "Primarily synthetic";
+  if (element.symbol === "Tc" || element.symbol === "Pm") return "Trace natural / largely synthetic";
+  return "Naturally occurring";
+}
+
+function electronConfiguration(atomicNumber) {
+  let remaining = atomicNumber;
+  const parts = [];
+
+  for (const [label, cap] of electronConfigOrder) {
+    if (remaining <= 0) break;
+    const used = Math.min(cap, remaining);
+    parts.push(`${label}${used}`);
+    remaining -= used;
+  }
+
+  return parts.join(" ");
+}
+
+function elementOverview(element, categoryLabel, period, phase, series) {
+  const occurrence = occurrenceFor(element).toLowerCase();
+  return `${element.name} is classified as a ${categoryLabel.toLowerCase()} in period ${period}. At room conditions it is typically ${phase.toLowerCase()}. It belongs to the ${series.toLowerCase()} and is ${occurrence}, making it relevant across chemistry education, periodic trends, and materials behavior.`;
+}
+
+function renderElementDetails(element) {
+  const shells = calcShells(element.number);
+  const categoryKey = elementCategory(element.symbol);
+  const categoryLabel = categoryLabels[categoryKey];
+  const { period, group } = periodGroup(element.symbol);
+  const phase = phaseFor(element.symbol);
+  const series = seriesFor(element.symbol);
+  const block = blockFor(element.symbol, group);
+  const fullShells = Array(7).fill(0);
+
+  shells.forEach((count, idx) => {
+    fullShells[idx] = count;
+  });
+
+  detailTitleEl.textContent = `${element.name} (${element.symbol})`;
+  detailCategoryEl.textContent = categoryLabel;
+  detailPeriodGroupEl.textContent = `${period} / ${group}`;
+  detailBlockEl.textContent = block;
+  detailPhaseEl.textContent = phase;
+  detailSeriesEl.textContent = series;
+  detailValenceEl.textContent = shells[shells.length - 1] || 0;
+  detailConfigEl.textContent = electronConfiguration(element.number);
+  detailShellsFullEl.textContent = fullShells.join(", ");
+  detailRadioactivityEl.textContent = radioactivityFor(element);
+  detailOccurrenceEl.textContent = occurrenceFor(element);
+  detailOverviewEl.textContent = elementOverview(element, categoryLabel, period, phase, series);
+}
+
 function tile(symbol, isSeries = false) {
   if (!symbol) {
     const spacer = document.createElement("div");
@@ -264,16 +433,13 @@ function tile(symbol, isSeries = false) {
   }
 
   const el = bySymbol.get(symbol);
+  const category = elementCategory(symbol);
   const button = document.createElement("button");
-  button.className = "ptile";
+  button.className = `ptile cat-${category}`;
   button.type = "button";
   button.dataset.symbol = symbol;
-  button.title = `${el.number}. ${el.name}`;
+  button.title = `${el.number}. ${el.name} • ${categoryLabels[category]}`;
   button.textContent = symbol;
-
-  if (isSeries) {
-    button.style.background = "#171717";
-  }
 
   button.addEventListener("click", () => setSelected(symbol));
   return button;
@@ -310,6 +476,7 @@ function setSelected(symbol) {
   selectedSymbol = symbol;
   const element = bySymbol.get(symbol);
   renderAtom(element);
+  renderElementDetails(element);
   syncSelectedUi();
 }
 

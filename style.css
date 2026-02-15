@@ -81,7 +81,7 @@ h1 {
 .visual-zone {
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(150px, 240px) 1fr;
+  grid-template-columns: minmax(150px, 240px) minmax(0, 1fr) minmax(210px, 300px);
   gap: clamp(8px, 1vw, 16px);
 }
 
@@ -93,6 +93,52 @@ h1 {
   display: grid;
   align-content: center;
   gap: 4px;
+}
+
+.detail-panel {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(15, 15, 15, 0.8);
+  padding: clamp(12px, 1.3vw, 16px);
+  overflow: auto;
+}
+
+.detail-title {
+  margin: 0 0 10px;
+  font-size: clamp(1rem, 1.3vw, 1.16rem);
+}
+
+.detail-grid {
+  display: grid;
+  gap: 3px;
+}
+
+.detail-value {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #e6e1d5;
+}
+
+.detail-value.mono {
+  font-family: "Space Grotesk", monospace;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+.detail-copy {
+  margin: 0;
+  color: #d7d1c4;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.detail-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.detail-panel::-webkit-scrollbar-thumb {
+  background: rgba(212, 192, 155, 0.35);
+  border-radius: 8px;
 }
 
 .label {
@@ -212,6 +258,42 @@ h1 {
   transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
+.ptile.cat-alkali {
+  background: #2b2b2b;
+}
+
+.ptile.cat-transition {
+  background: #202020;
+}
+
+.ptile.cat-metalloid {
+  background: #3a3a3a;
+}
+
+.ptile.cat-nonmetal {
+  background: #171717;
+}
+
+.ptile.cat-halogen {
+  background: #2f2f2f;
+}
+
+.ptile.cat-noble {
+  background: #424242;
+}
+
+.ptile.cat-lanthanide {
+  background: #252525;
+}
+
+.ptile.cat-actinide {
+  background: #303030;
+}
+
+.ptile.cat-other {
+  background: #141414;
+}
+
 .ptile:hover {
   transform: translateY(-1px);
   border-color: rgba(212, 192, 155, 0.9);
@@ -239,6 +321,7 @@ h1 {
 
   .visual-zone {
     grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(170px, 34vh) auto;
   }
 
   .element-info {
@@ -251,5 +334,9 @@ h1 {
   .value {
     margin: 0;
     font-size: clamp(0.84rem, 2vw, 1rem);
+  }
+
+  .detail-panel {
+    max-height: 220px;
   }
 }
