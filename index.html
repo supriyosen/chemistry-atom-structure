@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atomic Atlas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Interactive Chemistry</p>
+          <h1>Atomic Atlas</h1>
+        </div>
+        <label class="picker-wrap" for="elementPicker">
+          <span>Select Element</span>
+          <select id="elementPicker" aria-label="Select an element"></select>
+        </label>
+      </header>
+
+      <main class="visual-zone">
+        <aside class="element-info" id="elementInfo">
+          <p class="label">Atomic Number</p>
+          <p class="value" id="atomicNumber">1</p>
+          <p class="label">Element</p>
+          <p class="value" id="elementName">Hydrogen</p>
+          <p class="label">Electron Shells</p>
+          <p class="value shells" id="shellConfig">1</p>
+        </aside>
+
+        <section class="atom-stage" aria-live="polite">
+          <svg id="atomSvg" viewBox="0 0 600 600" role="img" aria-label="Atomic structure visualization"></svg>
+        </section>
+      </main>
+
+      <section class="table-zone" aria-label="Periodic table">
+        <div class="periodic-grid" id="periodicGrid"></div>
+        <div class="series-row" id="lanthanidesRow"></div>
+        <div class="series-row" id="actinidesRow"></div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

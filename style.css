@@ -1,0 +1,255 @@
+:root {
+  --bg: #090909;
+  --panel: #121212;
+  --ink: #f2efe8;
+  --ink-muted: #bdb7aa;
+  --accent: #d4c09b;
+  --accent-soft: rgba(212, 192, 155, 0.2);
+  --line: rgba(242, 239, 232, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 10%, #1a1a1a, var(--bg) 56%);
+  color: var(--ink);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+}
+
+.app-shell {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto minmax(260px, 40vh) minmax(0, 1fr);
+  gap: clamp(8px, 1.2vh, 14px);
+  padding: clamp(10px, 1.4vw, 20px);
+}
+
+.topbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--line);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  border-radius: 16px;
+  padding: clamp(10px, 1.2vw, 14px) clamp(12px, 1.5vw, 20px);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--ink-muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.67rem;
+}
+
+h1 {
+  margin: 2px 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.5rem, 2.8vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.picker-wrap {
+  display: grid;
+  gap: 4px;
+  min-width: min(280px, 50vw);
+  color: var(--ink-muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+#elementPicker {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0f0f0f;
+  color: var(--ink);
+  padding: 8px 10px;
+  font-size: 0.95rem;
+}
+
+.visual-zone {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(150px, 240px) 1fr;
+  gap: clamp(8px, 1vw, 16px);
+}
+
+.element-info {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(15, 15, 15, 0.8);
+  padding: clamp(12px, 1.3vw, 16px);
+  display: grid;
+  align-content: center;
+  gap: 4px;
+}
+
+.label {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.value {
+  margin: 0 0 8px;
+  font-size: clamp(1rem, 1.5vw, 1.26rem);
+}
+
+.shells {
+  color: var(--accent);
+}
+
+.atom-stage {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(212, 192, 155, 0.2), transparent 56%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+#atomSvg {
+  width: min(100%, 560px);
+  max-height: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.ring {
+  fill: none;
+  stroke: rgba(242, 239, 232, 0.42);
+  stroke-width: 1.8;
+}
+
+.electron {
+  fill: #f4e0b8;
+  filter: drop-shadow(0 0 8px rgba(212, 192, 155, 0.9));
+}
+
+.nucleus-core {
+  fill: rgba(212, 192, 155, 0.35);
+  stroke: rgba(212, 192, 155, 0.95);
+  stroke-width: 1.6;
+}
+
+.nucleus-text {
+  font-family: "Cormorant Garamond", serif;
+  fill: var(--ink);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.orbit {
+  transform-origin: 300px 300px;
+  animation: spin linear infinite;
+}
+
+.table-zone {
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(11, 11, 11, 0.86);
+  padding: clamp(6px, 0.8vw, 10px);
+  display: grid;
+  grid-template-rows: minmax(0, 7fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3px;
+  overflow: hidden;
+}
+
+.periodic-grid,
+.series-row {
+  display: grid;
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+  gap: 3px;
+  min-height: 0;
+}
+
+.periodic-grid {
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+}
+
+.series-row {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.ptile,
+.spacer {
+  height: 100%;
+  border-radius: 8px;
+}
+
+.spacer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ptile {
+  border: 1px solid var(--line);
+  background: #151515;
+  color: var(--ink);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(0.48rem, 0.82vw, 0.74rem);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.ptile:hover {
+  transform: translateY(-1px);
+  border-color: rgba(212, 192, 155, 0.9);
+}
+
+.ptile.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: #fef9ef;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-rows: auto minmax(200px, 34vh) minmax(0, 1fr);
+  }
+
+  .visual-zone {
+    grid-template-columns: 1fr;
+  }
+
+  .element-info {
+    grid-auto-flow: column;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: center;
+    gap: 8px;
+  }
+
+  .value {
+    margin: 0;
+    font-size: clamp(0.84rem, 2vw, 1rem);
+  }
+}
